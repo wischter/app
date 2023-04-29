@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Despertador</title>
+</head>
+<body>
+	<h1>Despertador</h1>
+	<form>
+		<label for="hora">Hora do alarme:</label>
+		<input type="time" id="hora" name="hora"><br><br>
+		<label for="mensagem">Mensagem de alarme:</label>
+		<input type="text" id="mensagem" name="mensagem"><br><br>
+		<button type="button" onclick="definirAlarme()">Definir alarme</button>
+	</form>
+
+	<script>
+		var timer;
+
+		function definirAlarme() {
+			// Obter a hora do alarme do formulário
+			var hora = document.getElementById("hora").value;
+			var partesHora = hora.split(":");
+			var horas = parseInt(partesHora[0]);
+			var minutos = parseInt(partesHora[1]);
+
+			// Obter a mensagem de alarme do formulário
+			var mensagem = document.getElementById("mensagem").value;
+
+			// Criar um objeto Date para a hora do alarme
+			var alarme = new Date();
+			alarme.setHours(horas);
+			alarme.setMinutes(minutos);
+			alarme.setSeconds(0);
+			alarme.setMilliseconds(0);
+
+			// Obter a hora atual
+			var agora = new Date();
+
+			// Calcular o tempo restante até o alarme
+			var tempoRestante = alarme.getTime() - agora.getTime();
+
+			// Se o tempo até o alarme for negativo, o alarme já passou. Defina-o para amanhã.
+			if (tempoRestante < 0) {
+				alarme.setDate(alarme.getDate() + 1);
+				tempoRestante = alarme.getTime() - agora.getTime();
+			}
+
+			// Definir o temporizador
+			timer = setTimeout(function() {
+				// Exibir a mensagem de alarme
+				alert(mensagem);
+
+				// Reproduzir um som de alarme (opcional)
+				var audio = new Audio('alarme.mp3');
+				audio.play();
+			}, tempoRestante);
+		}
+	</script>
+</body>
+</html>
